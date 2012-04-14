@@ -4,6 +4,9 @@ License terms are specified in source files and individual directories.
 
 ## Contents
 
+* docs - Documentation sources, usually HTML/HTML5 for websites
+* src - Source code for various projects
+      - src/android contains buildable Android apps that should work with either Eclipse or Ant
 * wallpapers - Images for Android backgrounds. Typically PNG files with Photoshop PSD sources when possible.
 
 ## Contacts
