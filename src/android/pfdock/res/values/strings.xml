@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- 
+Copyright 2012 Eric H. Cloninger, dba PurpleFoto
+ 
+Licensed under the Apache License, Version 2.0 (the "License"); you 
+may not use this file except in compliance with the License. You may 
+obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0 
+
+Unless required by applicable law or agreed to in writing, software 
+distributed under the License is distributed on an "AS IS" BASIS, 
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or 
+implied. See the License for the specific language governing 
+permissions and limitations under the License
+ -->
+<resources>
+    <string name="app_name">PurpleDock</string>
+    <string name="starter_time">12:59 PM</string>
+    <string name="desc_googlemaps">Launches the full version of Google Maps</string>
+    <string name="desc_phone">Goes to phone app</string>
+    <string name="desc_home">Goes to home screen</string>
+    <string name="about">About PurpleDock</string>
+    <string name="copyright_self">PurpleDock by PurpleFoto\nA car dock app</string>
+    <string name="starter_speed_land">188</string>
+    <string name="starter_battery">100%</string>
+    <string name="desc_music">Launches users music app</string>
+    <string name="desc_voicesearch">Voice search button</string>
+    <string name="settings">Settings</string>
+    <string name="desc_places">Brings up the quick maps view</string>
+    <string name="confirm_exit_desc">Confirm exit to launcher?</string>
+    <string name="confirm_exit_to_homescreen">Exit to the home screen?</string>
+    <string name="clock_24_hour_desc">Use 24 hour clock?</string>
+    <string-array name="units">
+        <item>Imperial</item>
+        <item>Metric</item>
+    </string-array>
+    <string name="units_label">Units of measurement</string>
+    <string name="default_units">Imperial</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="component_picker_title">Choose a component</string>
+    <string name="component_class">Component Class</string>
+    <string name="component_name">Component Name</string>
+    <string name="no_such_service">That service does not exist on this device. Check your settings for this button.</string>
+    <string name="no_maps_service">No maps service exists on this device.</string>
+    <string name="no_dialer_service">Cannot dial the phone on this device.</string>
+    <string name="pfurl">http://pfdock.purplefoto.com</string>
+    <string name="reset_components">Reset components</string>
+    <string name="confirm_reset">Do you want to reset all the components to their original settings?</string>
+    <string name="warning_msg">Keep your eyes on the road and your hands upon the wheel.</string>
+    <string name="no_jerk">Don\'t be a jerk</string>
+</resources>
