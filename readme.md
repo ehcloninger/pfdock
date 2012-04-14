@@ -11,8 +11,9 @@ License terms are specified in source files and individual directories.
 
 ## Contacts
 
-* http://www.purplefoto.com - My poorly maintained developer site (honestly, I'll get better)
-* http://www.ericcloninger.com - My occasionally updated personal web page
+* http://www.purplefoto.com - My developer site with blog and application docs
+* http://www.ericcloninger.com - My personal web site, with WP blog
 * https://twitter.com/#!/ericcloninger - Twitter
+* https://twitter.com/#!/purplefoto - Twitter
 * https://plus.google.com/u/0/112793166994287429520/posts - G+
 * mailto:prplfoto@gmail.com - Email
