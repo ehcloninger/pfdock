@@ -1,0 +1,164 @@
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/i/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title></title>
+  <meta name="description" content="">
+
+  <!-- Mobile viewport optimized: h5bp.com/viewport -->
+  <meta name="viewport" content="width=device-width">
+
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
+
+  <!-- All JavaScript at the bottom, except this Modernizr build.
+       Modernizr enables HTML5 elements & feature detects for optimal performance.
+       Create your own custom Modernizr build: www.modernizr.com/download/ -->
+  <script src="js/libs/modernizr-2.5.3.min.js"></script>
+</head>
+<body>
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+  <header>
+    <h1><img src="img/ic_launcher.png">PurpleDock</h1>
+  </header>
+  <div id="main" role="main">
+    <div id="intro">
+      <p><img src="img/purpledock_small.png" id="purple-dock-img">PurpleDock is a simple replacement for the car dock app that ships with many handsets. The design goals for the app were big buttons that are easy to reach and the ability to get to the home screen when necessary.</p>
+      <p>Is PurpleDock better than your OEM app? Maybe, maybe not, but it does what I want and I hope it works for you.</p>
+	  <p>PurpleDock works in both Portrait and Landscape orientation and has been tested with phones running Android 2.2 (Froyo), 2.3.x (Gingerbread), and 4.0.x (Ice Cream Sandwich). 
+	  It works when connected to power and disconnected, although I deliberately throttle back the GPS usage when not connected to power in order to save battery life.
+    </div>
+
+    <div id="docs">
+      <h2 class="h2-text">Using PurpleDock</h2>
+
+      <p>There are five buttons that PurpleDock uses to launch different apps. The sixth button, with a home icon, quits PurpleDock and takes you to the home screen.  The buttons and their purposes are</p>
+
+      <dl id="usage" class="subsection">
+        <dt id="phone">Phone</dt>
+        <dd>Launches <pre>Intent.ACTION_DIAL</pre>, which requires telephony on the device</dd>
+
+        <dt id="maps">Maps</dt>
+        <dd>Launches <pre>Intent.ACTION_VIEW</pre> with "geo:" + latitude + longitude</dd>
+
+        <dt id="places">Places</dt>
+        <dd>By default, launches Places <pre>(com. google. android. apps. maps at maps. PlacesActivity)</pre>This behavior can be overridden.</dd>
+
+        <dt id="music">Music</dt>
+        <dd>By default, launches Google Music <pre>(com. google. android. music at music. activitymanagement. TopLevelActivity)</pre> This behavior can be overridden.</dd>
+
+        <dt id="voice-search">Voice Search</dt>
+        <dd>By default, launches Voice Search <pre>(com. google. android. voicesearch at voicesearch. RecognitionActivity)</pre> This behavior can be overridden.</dd>
+        
+        <dt>Home</dt>
+        <dd>Quit PurpleDock and go to Home screen.  With this power comes responsibility. Don't text and drive.</p></dd>
+      </dl>
+
+      <div id="overriding-behavior" class="subsection clearfix">
+
+        <h3 class="h3-text">Overriding Behavior</h3>
+      
+        <p><img src="img/component_edit_small.png" align="left">On the three buttons for Music, Places, and Voice Search, if you press and hold the button for 1 second, you will get a slight haptic (vibrating) feedback and a dialog will appear. This dialog lets you modify the values for launching an app from the button. If you want to launch a different music player app, you need to find its fully qualified name and the name of its top level Activity.</p>
+
+        <p>I will eventually make a better UI for this, but give it some time. If you end up messing up these values, you can always reset them by choosing the "Reset Components" item from the menu. This will reset all 3 buttons to their original factory state.</p>
+      </div> <!-- end overriding-behavior -->
+
+      <div class="subsection clearfix" id="prefs">
+        <h3 class="h3-text">Preferences</h3>
+        <p><img src="img/settings_small.png" align="left">There are a few things you can change with PurpleDock. You can set whether the clock displays in 12 or 24 hour format and whether the speed displays in Imperial or Metric units. Also, whether to pester you when you exit. For now, that's it.</p>
+      </div><!-- end perfs -->
+    </div>
+
+  <footer>
+    <div class="footer-section" id="about">
+      <h2 class="h2-text">Why Purple?</h2>
+      <p>There were a lot of choices, but I needed something that wasn't too florescent for my own tastes. A future release will give you the ability to either choose color ranges, icon sets, or some other way to manage icons. </p>
+    </div>
+
+    <div class="footer-section">  
+      <h2 class="h2-text">Get PurpleDock</h2>
+      
+      <p>PurpleDock is available at the Google Play Apps store. [TODO: Add link &amp; QRCode]</p>
+    </div>
+
+    <div id="feedback" class="footer-section">
+      <h2 class="h2-text">Feedback</h2>
+      
+      <table border="0">
+        <tbody>
+          <tr>
+      <td><img src="img/twitter.png" width="48" align="left"></td><td>Follow <a href="https://twitter.com/#%21/purplefoto">@purplefoto</a> on Twitter</td>
+          </tr>
+          <tr>
+      <td><img src="img/GooglePlus.png" width="32" align="left"></td><td><a href="https://plus.google.com/u/0/b/114420623394151939618/">PurpleFoto</a> on Google+</td>
+          </tr>
+          <tr>
+      <td><img src="img/Octocat.png" width="48" align="left"></td><td>Use the <a href="https://github.com/purplefoto/pf-public/issues/new">PurpleFoto Public github</a> issue tracker for bug reports or send email to <a href="mailto:bugs@purplefoto.com">bugs@purplefoto.com</a>.</td>
+          </tr>
+          <tr>
+      <td><img src="img/pfoto.png" width="48" align="left"></td><td>The <a href="http://www.purplefoto.com">PurpleFoto main site</a></td>
+          </tr>
+            </tbody>
+      </table>
+
+      <h2 class="h2-text">Known Issues</h2>
+	  <ul>
+	  <li>When exiting PurpleDock by pressing Home button for the first time, you may need to go through this process twice. After the first time, it works correctly.</li>
+	  <li>If you restart PurpleDock manually using the icon, rather than by docking, the app does not override the operation of the home key. This is by design. </li>
+	  </ul>
+      <h2 class="h2-text">Revision History</h2>
+      
+      <table border="1">
+        <tbody>
+          <tr>
+            <th>Version</th>
+            <th>Date</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>2012.04.15</td>
+            <td>Initial Release</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </footer>
+
+
+  <!-- JavaScript at the bottom for fast page loading -->
+
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+
+  <!-- scripts concatenated and minified via build script -->
+  <script src="js/plugins.js"></script>
+  <script src="js/script.js"></script>
+  <!-- end scripts -->
+
+  <!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
+       mathiasbynens.be/notes/async-analytics-snippet -->
+  <script>
+    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g,s)}(document,'script'));
+  </script>
+</body>
+</html>
