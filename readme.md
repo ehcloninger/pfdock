@@ -16,4 +16,5 @@ License terms are specified in source files and individual directories.
 * https://twitter.com/#!/ericcloninger - Twitter
 * https://twitter.com/#!/purplefoto - Twitter
 * https://plus.google.com/u/0/112793166994287429520/posts - G+
-* mailto:prplfoto@gmail.com - Email
+* bugs@purplefoto.com - Bugs, features, ideas, complaints
+* prplfoto@gmail.com - Other email
