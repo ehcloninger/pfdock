@@ -69,5 +69,7 @@ permissions and limitations under the License
         <item>Orange</item>
     </string-array>
     <string name="icon_color">Icon color</string>
-    <string name="default_color">purple</string>
+    <string name="text_color">Text color</string>
+    <string name="default_icon_color">purple</string>
+    <string name="default_text_color">white</string>
 </resources>

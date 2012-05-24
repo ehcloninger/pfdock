@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -81,6 +82,7 @@ public class PFDock extends Activity {
 	Location m_lastLocation = new Location(LocationManager.GPS_PROVIDER);
 	PFLocationListener m_locationListener = new PFLocationListener();
 	HashMap<String, int[]> m_colorIcons = new HashMap<String, int[]>();
+	HashMap<String, Integer> m_colorText = new HashMap<String, Integer>();
 
 	/*
 	 * Respond to ACTION_BATTERY_CHANGED Determines the battery level if it
@@ -314,6 +316,7 @@ public class PFDock extends Activity {
 			m_timeView.setText(getSimpleTimeString());
 
 		this.setIconsColor(preferences);
+		this.setTextColor(preferences);
 	}
 
 	/*
@@ -407,11 +410,13 @@ public class PFDock extends Activity {
 							SharedPreferences sharedPreferences, String key) {
 						if (key.contentEquals("icon_color"))
 							PFDock.this.setIconsColor(sharedPreferences);
+						if (key.contentEquals("text_color"))
+							PFDock.this.setTextColor(sharedPreferences);
 					}
 				});
 
 		// Define colors and icon IDs used in setIconsColor. Can't store these
-		// in a database as the values of the icons change each build. If you 
+		// in a database as the values of the icons change each build. If you
 		// add new colors, add an entry in this map to go along with the name
 		// in the strings.xml, colors_dont_localize
 		m_colorIcons.put("white", new int[] { R.drawable.ics_places_white,
@@ -442,6 +447,15 @@ public class PFDock extends Activity {
 				R.drawable.ics_music_purple, R.drawable.ics_voicesearch_purple,
 				R.drawable.ics_phone_purple, R.drawable.ics_maps_purple,
 				R.drawable.ics_home_purple });
+
+		// These are the colors for the text components
+		m_colorText.put("white", Color.rgb(255, 255, 255));
+		m_colorText.put("red", Color.rgb(255, 0, 0));
+		m_colorText.put("blue", Color.rgb(0, 0, 255));
+		m_colorText.put("green", Color.rgb(0, 255, 0));
+		m_colorText.put("yellow", Color.rgb(255, 255, 0));
+		m_colorText.put("orange", Color.rgb(255, 153, 51));
+		m_colorText.put("purple", Color.rgb(255, 102, 255));
 
 		boolean firstTime = preferences.getBoolean("first_time", true);
 		if (firstTime) {
@@ -535,31 +549,63 @@ public class PFDock extends Activity {
 		m_homeBtn = (ImageButton) this.findViewById(R.id.home);
 
 		this.setIconsColor(preferences);
-
+		this.setTextColor(preferences);
 	}
 
 	/*
-	 * PFDock.setIconsColor - 
+	 * PFDock.setIconsColor -
 	 * 
 	 * Set the color of the icons on the main screen, based on user choice in
 	 * preferences. Values are stored in a hashmap initialized in onCreate
 	 */
 	void setIconsColor(SharedPreferences preferences) {
 		String defaultColor = getApplicationContext().getString(
-				R.string.default_color);
+				R.string.default_icon_color);
 		String prefColor = preferences.getString("icon_color", defaultColor);
-		int[] values = (int []) m_colorIcons.get(prefColor);
-		if (values != null)
+		int[] values = (int[]) m_colorIcons.get(prefColor);
+		if (values != null && values.length == 6) {
+			m_placesBtn.setImageResource(values[0]);
+			m_musicBtn.setImageResource(values[1]);
+			m_voiceBtn.setImageResource(values[2]);
+			m_phoneBtn.setImageResource(values[3]);
+			m_mapsBtn.setImageResource(values[4]);
+			m_homeBtn.setImageResource(values[5]);
+		}
+		else
 		{
-			if (values.length == 6)
-			{
-				m_placesBtn.setImageResource(values[0]);
-				m_musicBtn.setImageResource(values[1]);
-				m_voiceBtn.setImageResource(values[2]);
-				m_phoneBtn.setImageResource(values[3]);
-				m_mapsBtn.setImageResource(values[4]);
-				m_homeBtn.setImageResource(values[5]); 
-			}
+			// If, for whatever reason, the colors don't exist, revert to purple
+			m_placesBtn.setImageResource(R.drawable.ics_places_purple);
+			m_musicBtn.setImageResource(R.drawable.ics_music_purple);
+			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_purple);
+			m_phoneBtn.setImageResource(R.drawable.ics_phone_purple);
+			m_mapsBtn.setImageResource(R.drawable.ics_maps_purple);
+			m_homeBtn.setImageResource(R.drawable.ics_home_purple);
+		}
+	}
+
+	/*
+	 * PFDock.setTextColor -
+	 * 
+	 * Set the color of the text on the main screen, based on user choice in
+	 * preferences.
+	 */
+	void setTextColor(SharedPreferences preferences) {
+		String defaultColor = getApplicationContext().getString(
+				R.string.default_text_color);
+		String prefColor = preferences.getString("text_color", defaultColor);
+		Integer value = m_colorText.get(prefColor);
+
+		// Pull the color out of the table. if no value found, revert to white text
+		if (value != null) {
+			m_timeView.setTextColor(value.intValue());
+			m_speedView.setTextColor(value.intValue());
+			m_batteryView.setTextColor(value.intValue());
+		}
+		else
+		{
+			m_timeView.setTextColor(0xffffff);
+			m_speedView.setTextColor(0xffffff);
+			m_batteryView.setTextColor(0xffffff);
 		}
 	}
 

@@ -39,12 +39,20 @@ permissions and limitations under the License
         android:selectable="true"
         android:title="@string/units_label" />
     <ListPreference
-        android:defaultValue="@string/default_color"
+        android:defaultValue="@string/default_icon_color"
         android:enabled="true"
         android:entries="@array/colors_desc"
         android:entryValues="@array/colors_dont_localize"
         android:key="icon_color"
         android:selectable="true"
         android:title="@string/icon_color" />
-
+    <ListPreference
+        android:defaultValue="@string/default_text_color"
+        android:enabled="true"
+        android:entries="@array/colors_desc"
+        android:entryValues="@array/colors_dont_localize"
+        android:key="text_color"
+        android:selectable="true"
+        android:title="@string/text_color" />
+    
 </PreferenceScreen>
