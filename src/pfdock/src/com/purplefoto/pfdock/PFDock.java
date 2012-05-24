@@ -18,6 +18,7 @@ package com.purplefoto.pfdock;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,6 +32,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -78,6 +80,7 @@ public class PFDock extends Activity {
 	ComponentInfo m_currentComponent;
 	Location m_lastLocation = new Location(LocationManager.GPS_PROVIDER);
 	PFLocationListener m_locationListener = new PFLocationListener();
+	HashMap<String, int[]> m_colorIcons = new HashMap<String, int[]>();
 
 	/*
 	 * Respond to ACTION_BATTERY_CHANGED Determines the battery level if it
@@ -392,6 +395,54 @@ public class PFDock extends Activity {
 
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
+
+		/*
+		 * PFDock.onSharedPreferenceChanged
+		 * 
+		 * Listener to detect when the user has changed a preference
+		 */
+		preferences
+				.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+					public void onSharedPreferenceChanged(
+							SharedPreferences sharedPreferences, String key) {
+						if (key.contentEquals("icon_color"))
+							PFDock.this.setIconsColor(sharedPreferences);
+					}
+				});
+
+		// Define colors and icon IDs used in setIconsColor. Can't store these
+		// in a database as the values of the icons change each build. If you 
+		// add new colors, add an entry in this map to go along with the name
+		// in the strings.xml, colors_dont_localize
+		m_colorIcons.put("white", new int[] { R.drawable.ics_places_white,
+				R.drawable.ics_music_white, R.drawable.ics_voicesearch_white,
+				R.drawable.ics_phone_white, R.drawable.ics_maps_white,
+				R.drawable.ics_home_white });
+		m_colorIcons.put("red", new int[] { R.drawable.ics_places_red,
+				R.drawable.ics_music_red, R.drawable.ics_voicesearch_red,
+				R.drawable.ics_phone_red, R.drawable.ics_maps_red,
+				R.drawable.ics_home_red });
+		m_colorIcons.put("blue", new int[] { R.drawable.ics_places_blue,
+				R.drawable.ics_music_blue, R.drawable.ics_voicesearch_blue,
+				R.drawable.ics_phone_blue, R.drawable.ics_maps_blue,
+				R.drawable.ics_home_blue });
+		m_colorIcons.put("green", new int[] { R.drawable.ics_places_green,
+				R.drawable.ics_music_green, R.drawable.ics_voicesearch_green,
+				R.drawable.ics_phone_green, R.drawable.ics_maps_green,
+				R.drawable.ics_home_green });
+		m_colorIcons.put("yellow", new int[] { R.drawable.ics_places_yellow,
+				R.drawable.ics_music_yellow, R.drawable.ics_voicesearch_yellow,
+				R.drawable.ics_phone_yellow, R.drawable.ics_maps_yellow,
+				R.drawable.ics_home_yellow });
+		m_colorIcons.put("orange", new int[] { R.drawable.ics_places_orange,
+				R.drawable.ics_music_orange, R.drawable.ics_voicesearch_orange,
+				R.drawable.ics_phone_orange, R.drawable.ics_maps_orange,
+				R.drawable.ics_home_orange });
+		m_colorIcons.put("purple", new int[] { R.drawable.ics_places_purple,
+				R.drawable.ics_music_purple, R.drawable.ics_voicesearch_purple,
+				R.drawable.ics_phone_purple, R.drawable.ics_maps_purple,
+				R.drawable.ics_home_purple });
+
 		boolean firstTime = preferences.getBoolean("first_time", true);
 		if (firstTime) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -406,7 +457,7 @@ public class PFDock extends Activity {
 			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
 		}
-		
+
 		// Set the Activity to receive events for car dock
 		IntentFilter filter = new IntentFilter(Intent.ACTION_DOCK_EVENT);
 		m_receiver = new CarDockReceiver();
@@ -433,7 +484,7 @@ public class PFDock extends Activity {
 				@Override
 				public boolean onLongClick(View v) {
 					// There's certainly a better way to do this. But for now,
-					// set a storage variable (m_ci)
+					// set a storage variable (m_currentComponent)
 					// to hold the value of the current data going to and from
 					// the dialog and then
 					// reassign it when it returns. In the dialog handler, if
@@ -477,92 +528,41 @@ public class PFDock extends Activity {
 				}
 			});
 		}
-		
+
 		// Add buttons for phone, maps, and home
 		m_phoneBtn = (ImageButton) this.findViewById(R.id.phone);
 		m_mapsBtn = (ImageButton) this.findViewById(R.id.googlemaps);
 		m_homeBtn = (ImageButton) this.findViewById(R.id.home);
-		
+
 		this.setIconsColor(preferences);
 
 	}
-	
-	
-	public void onSharedPreferenceChanged (SharedPreferences sharedPreferences, String key)
-	{
-		if (key.contentEquals("icon_color"))
-			this.setIconsColor(sharedPreferences);
-	}
-	
-	void setIconsColor(SharedPreferences preferences)
-	{
-		String defaultColor = getApplicationContext().getString(R.string.default_color);
-		String prefColor = preferences.getString("icon_color", defaultColor);
 
-		if (prefColor.contentEquals("white"))
+	/*
+	 * PFDock.setIconsColor - 
+	 * 
+	 * Set the color of the icons on the main screen, based on user choice in
+	 * preferences. Values are stored in a hashmap initialized in onCreate
+	 */
+	void setIconsColor(SharedPreferences preferences) {
+		String defaultColor = getApplicationContext().getString(
+				R.string.default_color);
+		String prefColor = preferences.getString("icon_color", defaultColor);
+		int[] values = (int []) m_colorIcons.get(prefColor);
+		if (values != null)
 		{
-			m_placesBtn.setImageResource(R.drawable.ics_places_white);
-			m_musicBtn.setImageResource(R.drawable.ics_music_white);
-			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_white);
-			m_phoneBtn.setImageResource(R.drawable.ics_phone_white);
-			m_mapsBtn.setImageResource(R.drawable.ics_maps_white);
-			m_homeBtn.setImageResource(R.drawable.ics_home_white);
-		}
-		else if (prefColor.contentEquals("red"))
-		{
-			m_placesBtn.setImageResource(R.drawable.ics_places_red);
-			m_musicBtn.setImageResource(R.drawable.ics_music_red);
-			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_red);
-			m_phoneBtn.setImageResource(R.drawable.ics_phone_red);
-			m_mapsBtn.setImageResource(R.drawable.ics_maps_red);
-			m_homeBtn.setImageResource(R.drawable.ics_home_red);
-		}
-		else if (prefColor.contentEquals("blue"))
-		{
-			m_placesBtn.setImageResource(R.drawable.ics_places_blue);
-			m_musicBtn.setImageResource(R.drawable.ics_music_blue);
-			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_blue);
-			m_phoneBtn.setImageResource(R.drawable.ics_phone_blue);
-			m_mapsBtn.setImageResource(R.drawable.ics_maps_blue);
-			m_homeBtn.setImageResource(R.drawable.ics_home_blue);
-		}
-		else if (prefColor.contentEquals("green"))
-		{
-			m_placesBtn.setImageResource(R.drawable.ics_places_green);
-			m_musicBtn.setImageResource(R.drawable.ics_music_green);
-			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_green);
-			m_phoneBtn.setImageResource(R.drawable.ics_phone_green);
-			m_mapsBtn.setImageResource(R.drawable.ics_maps_green);
-			m_homeBtn.setImageResource(R.drawable.ics_home_green);
-		}
-		else if (prefColor.contentEquals("yellow"))
-		{
-			m_placesBtn.setImageResource(R.drawable.ics_places_yellow);
-			m_musicBtn.setImageResource(R.drawable.ics_music_yellow);
-			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_yellow);
-			m_phoneBtn.setImageResource(R.drawable.ics_phone_yellow);
-			m_mapsBtn.setImageResource(R.drawable.ics_maps_yellow);
-			m_homeBtn.setImageResource(R.drawable.ics_home_yellow);
-		}
-		else if (prefColor.contentEquals("orange"))
-		{
-			m_placesBtn.setImageResource(R.drawable.ics_places_orange);
-			m_musicBtn.setImageResource(R.drawable.ics_music_orange);
-			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_orange);
-			m_phoneBtn.setImageResource(R.drawable.ics_phone_orange);
-			m_mapsBtn.setImageResource(R.drawable.ics_maps_orange);
-			m_homeBtn.setImageResource(R.drawable.ics_home_orange);
-		}
-		else // default case, set to purple
-		{
-			m_placesBtn.setImageResource(R.drawable.ics_places_purple);
-			m_musicBtn.setImageResource(R.drawable.ics_music_purple);
-			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_purple);
-			m_phoneBtn.setImageResource(R.drawable.ics_phone_purple);
-			m_mapsBtn.setImageResource(R.drawable.ics_maps_purple);
-			m_homeBtn.setImageResource(R.drawable.ics_home_purple);
+			if (values.length == 6)
+			{
+				m_placesBtn.setImageResource(values[0]);
+				m_musicBtn.setImageResource(values[1]);
+				m_voiceBtn.setImageResource(values[2]);
+				m_phoneBtn.setImageResource(values[3]);
+				m_mapsBtn.setImageResource(values[4]);
+				m_homeBtn.setImageResource(values[5]); 
+			}
 		}
 	}
+
 	/*
 	 * PFDock.onCreateDialog - Handle the modal dialogs that arise from PFDock
 	 * 
@@ -592,11 +592,13 @@ public class PFDock extends Activity {
 							// TODO: Validate contents of edit field before
 							// assigning back to structure
 							if ((et != null) && (m_currentComponent != null))
-								m_currentComponent.name = et.getText().toString();
+								m_currentComponent.name = et.getText()
+										.toString();
 							et = (EditText) cpd
 									.findViewById(R.id.component_class);
 							if ((et != null) && (m_currentComponent != null))
-								m_currentComponent.category = et.getText().toString();
+								m_currentComponent.category = et.getText()
+										.toString();
 							dialog.dismiss();
 						}
 					});
