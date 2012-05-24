@@ -86,7 +86,7 @@ permissions and limitations under the License
                 android:contentDescription="@string/desc_phone"
                 android:hapticFeedbackEnabled="true"
                 android:onClick="btnClickedPhone"
-                android:src="@drawable/ics_phone" />
+                android:src="@drawable/ics_phone_purple" />
 
             <ImageButton
                 android:id="@+id/googlemaps"
@@ -99,7 +99,7 @@ permissions and limitations under the License
                 android:contentDescription="@string/desc_googlemaps"
                 android:hapticFeedbackEnabled="true"
                 android:onClick="btnClickedGoogleMaps"
-                android:src="@drawable/ics_maps" />
+                android:src="@drawable/ics_maps_purple" />
 
             <ImageButton
                 android:id="@+id/places"
@@ -112,7 +112,7 @@ permissions and limitations under the License
                 android:contentDescription="@string/desc_places"
                 android:hapticFeedbackEnabled="true"
                 android:onClick="btnClickedPlaces"
-                android:src="@drawable/ics_places" />
+                android:src="@drawable/ics_places_purple" />
         </LinearLayout>
 
         <LinearLayout
@@ -132,7 +132,7 @@ permissions and limitations under the License
                 android:contentDescription="@string/desc_music"
                 android:hapticFeedbackEnabled="true"
                 android:onClick="btnClickedMusic"
-                android:src="@drawable/ics_music" />
+                android:src="@drawable/ics_music_purple" />
 
             <ImageButton
                 android:id="@+id/voicesearch"
@@ -145,7 +145,7 @@ permissions and limitations under the License
                 android:contentDescription="@string/desc_voicesearch"
                 android:hapticFeedbackEnabled="true"
                 android:onClick="btnClickedVoiceSearch"
-                android:src="@drawable/ics_voicesearch" />
+                android:src="@drawable/ics_voicesearch_purple" />
 
             <ImageButton
                 android:id="@+id/home"
@@ -158,7 +158,7 @@ permissions and limitations under the License
                 android:contentDescription="@string/desc_home"
                 android:hapticFeedbackEnabled="true"
                 android:onClick="btnClickedHome"
-                android:src="@drawable/ics_home" />
+                android:src="@drawable/ics_home_purple" />
         </LinearLayout>
 
 

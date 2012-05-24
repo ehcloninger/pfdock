@@ -68,6 +68,9 @@ public class PFDock extends Activity {
 	ImageButton m_placesBtn = null;
 	ImageButton m_musicBtn = null;
 	ImageButton m_voiceBtn = null;
+	ImageButton m_phoneBtn = null;
+	ImageButton m_mapsBtn = null;
+	ImageButton m_homeBtn = null;
 	boolean m_isPluggedIn = false;
 	boolean m_imperial = true;
 	final int COMPONENT_PICKER = 1;
@@ -306,6 +309,8 @@ public class PFDock extends Activity {
 		// Set the time
 		if (m_timeView != null)
 			m_timeView.setText(getSimpleTimeString());
+
+		this.setIconsColor(preferences);
 	}
 
 	/*
@@ -401,7 +406,7 @@ public class PFDock extends Activity {
 			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
 		}
-
+		
 		// Set the Activity to receive events for car dock
 		IntentFilter filter = new IntentFilter(Intent.ACTION_DOCK_EVENT);
 		m_receiver = new CarDockReceiver();
@@ -472,8 +477,92 @@ public class PFDock extends Activity {
 				}
 			});
 		}
-	}
+		
+		// Add buttons for phone, maps, and home
+		m_phoneBtn = (ImageButton) this.findViewById(R.id.phone);
+		m_mapsBtn = (ImageButton) this.findViewById(R.id.googlemaps);
+		m_homeBtn = (ImageButton) this.findViewById(R.id.home);
+		
+		this.setIconsColor(preferences);
 
+	}
+	
+	
+	public void onSharedPreferenceChanged (SharedPreferences sharedPreferences, String key)
+	{
+		if (key.contentEquals("icon_color"))
+			this.setIconsColor(sharedPreferences);
+	}
+	
+	void setIconsColor(SharedPreferences preferences)
+	{
+		String defaultColor = getApplicationContext().getString(R.string.default_color);
+		String prefColor = preferences.getString("icon_color", defaultColor);
+
+		if (prefColor.contentEquals("white"))
+		{
+			m_placesBtn.setImageResource(R.drawable.ics_places_white);
+			m_musicBtn.setImageResource(R.drawable.ics_music_white);
+			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_white);
+			m_phoneBtn.setImageResource(R.drawable.ics_phone_white);
+			m_mapsBtn.setImageResource(R.drawable.ics_maps_white);
+			m_homeBtn.setImageResource(R.drawable.ics_home_white);
+		}
+		else if (prefColor.contentEquals("red"))
+		{
+			m_placesBtn.setImageResource(R.drawable.ics_places_red);
+			m_musicBtn.setImageResource(R.drawable.ics_music_red);
+			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_red);
+			m_phoneBtn.setImageResource(R.drawable.ics_phone_red);
+			m_mapsBtn.setImageResource(R.drawable.ics_maps_red);
+			m_homeBtn.setImageResource(R.drawable.ics_home_red);
+		}
+		else if (prefColor.contentEquals("blue"))
+		{
+			m_placesBtn.setImageResource(R.drawable.ics_places_blue);
+			m_musicBtn.setImageResource(R.drawable.ics_music_blue);
+			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_blue);
+			m_phoneBtn.setImageResource(R.drawable.ics_phone_blue);
+			m_mapsBtn.setImageResource(R.drawable.ics_maps_blue);
+			m_homeBtn.setImageResource(R.drawable.ics_home_blue);
+		}
+		else if (prefColor.contentEquals("green"))
+		{
+			m_placesBtn.setImageResource(R.drawable.ics_places_green);
+			m_musicBtn.setImageResource(R.drawable.ics_music_green);
+			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_green);
+			m_phoneBtn.setImageResource(R.drawable.ics_phone_green);
+			m_mapsBtn.setImageResource(R.drawable.ics_maps_green);
+			m_homeBtn.setImageResource(R.drawable.ics_home_green);
+		}
+		else if (prefColor.contentEquals("yellow"))
+		{
+			m_placesBtn.setImageResource(R.drawable.ics_places_yellow);
+			m_musicBtn.setImageResource(R.drawable.ics_music_yellow);
+			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_yellow);
+			m_phoneBtn.setImageResource(R.drawable.ics_phone_yellow);
+			m_mapsBtn.setImageResource(R.drawable.ics_maps_yellow);
+			m_homeBtn.setImageResource(R.drawable.ics_home_yellow);
+		}
+		else if (prefColor.contentEquals("orange"))
+		{
+			m_placesBtn.setImageResource(R.drawable.ics_places_orange);
+			m_musicBtn.setImageResource(R.drawable.ics_music_orange);
+			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_orange);
+			m_phoneBtn.setImageResource(R.drawable.ics_phone_orange);
+			m_mapsBtn.setImageResource(R.drawable.ics_maps_orange);
+			m_homeBtn.setImageResource(R.drawable.ics_home_orange);
+		}
+		else // default case, set to purple
+		{
+			m_placesBtn.setImageResource(R.drawable.ics_places_purple);
+			m_musicBtn.setImageResource(R.drawable.ics_music_purple);
+			m_voiceBtn.setImageResource(R.drawable.ics_voicesearch_purple);
+			m_phoneBtn.setImageResource(R.drawable.ics_phone_purple);
+			m_mapsBtn.setImageResource(R.drawable.ics_maps_purple);
+			m_homeBtn.setImageResource(R.drawable.ics_home_purple);
+		}
+	}
 	/*
 	 * PFDock.onCreateDialog - Handle the modal dialogs that arise from PFDock
 	 * 

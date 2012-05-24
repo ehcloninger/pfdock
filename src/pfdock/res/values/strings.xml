@@ -50,4 +50,24 @@ permissions and limitations under the License
     <string name="confirm_reset">Do you want to reset all the components to their original settings?</string>
     <string name="warning_msg">Keep your eyes on the road and your hands upon the wheel.</string>
     <string name="no_jerk">Don\'t be a jerk</string>
+    <string-array name="colors_dont_localize">
+        <item>purple</item>
+        <item>white</item>
+        <item>red</item>
+        <item>blue</item>
+        <item>green</item>
+        <item>yellow</item>
+        <item>orange</item>
+    </string-array>
+    <string-array name="colors_desc">
+        <item>Purple</item>
+        <item>White</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Orange</item>
+    </string-array>
+    <string name="icon_color">Icon color</string>
+    <string name="default_color">purple</string>
 </resources>
