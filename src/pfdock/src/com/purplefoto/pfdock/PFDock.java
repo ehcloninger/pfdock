@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Eric H. Cloninger, dba PurpleFoto
+Copyright 2013 Eric H. Cloninger, dba PurpleFoto
  
 Licensed under the Apache License, Version 2.0 (the "License"); you 
 may not use this file except in compliance with the License. You may 
@@ -15,12 +15,12 @@ permissions and limitations under the License
  */
 
 package com.purplefoto.pfdock;
+import com.actionbarsherlock.app.SherlockActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.UiModeManager;
@@ -50,8 +50,10 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 // Used to store information for custom launches of places, music, and voice search buttons
 class ComponentInfo {
@@ -63,7 +65,7 @@ class ComponentInfo {
  * PFDock - This is the main activity for the application. Almost all user
  * interaction other than preferences comes through this class.
  */
-public class PFDock extends Activity {
+public class PFDock extends SherlockActivity {
 	CarDockReceiver m_receiver = null;
 	TextView m_timeView = null;
 	TextView m_speedView = null;
@@ -74,7 +76,9 @@ public class PFDock extends Activity {
 	ImageButton m_phoneBtn = null;
 	ImageButton m_mapsBtn = null;
 	ImageButton m_homeBtn = null;
+	ImageView m_providerIcon = null;
 	boolean m_isPluggedIn = false;
+	boolean m_coarseGPS = true;
 	boolean m_imperial = true;
 	final int COMPONENT_PICKER = 1;
 	ComponentInfo m_components[] = new ComponentInfo[3];
@@ -284,17 +288,44 @@ public class PFDock extends Activity {
 		String default_units = getString(R.string.default_units);
 		String units = preferences.getString("speed_units", default_units);
 		m_imperial = units.contentEquals(default_units);
+		m_coarseGPS = preferences.getBoolean("coarse_gps", true);
 
 		// Only allow GPS to operate continuously if the unit is plugged in
 		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-		if (m_isPluggedIn)
-			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 5,
-					m_locationListener);
-		else
-			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100,
-					m_locationListener);
+		boolean network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+		boolean gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
+		// If the user requests coarse GPS and the network is running, use network.
+		// Also use network if the GPS isn't enabled and the network is enabled
+		if ((m_coarseGPS && network_enabled) || (!gps_enabled && network_enabled))
+		{
+			// Issue #5 -  http://github.com/ehcloninger/pf-public/issues/issue/5
+			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 5,
+					m_locationListener);
+			
+			if (m_providerIcon != null)
+				m_providerIcon.setImageResource(R.drawable.ic_network);
+		}
+		else
+		{
+			if (gps_enabled)
+			{
+				if (m_isPluggedIn)
+					lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 5,
+							m_locationListener);
+				else
+					lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100,
+							m_locationListener);
+				if (m_providerIcon != null)
+					m_providerIcon.setImageResource(R.drawable.ic_gps);
+			}
+			else
+			{
+				// you're screwed. No location provider found
+			}
+		}
+		
 		// Reconnect broadcast receivers
 		this.registerReceiver(m_batteryReceiver, new IntentFilter(
 				Intent.ACTION_BATTERY_CHANGED));
@@ -317,16 +348,13 @@ public class PFDock extends Activity {
 
 		this.setIconsColor(preferences);
 		this.setTextColor(preferences);
+		this.setAppPreferences(preferences);
 	}
 
 	/*
 	 * GetComponentInfo - Retrieve values of the 3 user overrideable buttons
 	 */
-	void getAppPreferences() {
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(getApplicationContext());
-		for (int i = 0; i < 3; i++)
-			m_components[i] = new ComponentInfo();
+	void setAppPreferences(SharedPreferences preferences) {
 
 		m_components[0].name = preferences.getString("component_name_places",
 				"com.google.android.apps.maps");
@@ -343,22 +371,6 @@ public class PFDock extends Activity {
 		m_components[2].category = preferences.getString(
 				"component_category_voice",
 				"com.google.android.voicesearch.RecognitionActivity");
-	}
-
-	/*
-	 * ResetComponentInfo - Put the 3 user overrideable buttons back to their
-	 * factory state
-	 */
-	void resetComponentInfo() {
-		// TODO: Get these from a database or a string array
-		m_components[0].name = "com.google.android.apps.maps";
-		m_components[0].category = "com.google.android.maps.PlacesActivity";
-		m_components[1].name = "com.google.android.music";
-		m_components[1].category = "com.android.music.activitymanagement.TopLevelActivity";
-		m_components[2].name = "com.google.android.voicesearch";
-		m_components[2].category = "com.google.android.voicesearch.RecognitionActivity";
-
-		putAppPreferences();
 	}
 
 	/*
@@ -390,14 +402,18 @@ public class PFDock extends Activity {
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		for (int i = 0; i < 3; i++)
+			m_components[i] = new ComponentInfo();
+
 		Log.i(getPackageName(), "PFDock.onCreate");
-		getAppPreferences();
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.main);
 
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
+
+		setAppPreferences(preferences);
 
 		/*
 		 * PFDock.onSharedPreferenceChanged
@@ -480,6 +496,7 @@ public class PFDock extends Activity {
 		m_timeView = (TextView) this.findViewById(R.id.time);
 		m_speedView = (TextView) this.findViewById(R.id.speed);
 		m_batteryView = (TextView) this.findViewById(R.id.battery);
+		m_providerIcon = (ImageView) this.findViewById(R.id.provider);
 
 		if (m_timeView != null)
 			m_timeView.setText(getSimpleTimeString());
@@ -869,8 +886,8 @@ public class PFDock extends Activity {
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		Log.i(getPackageName(), "PFDock.onCreateOptionsMenu");
 
@@ -882,53 +899,11 @@ public class PFDock extends Activity {
 	 * 
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 		Log.i(getPackageName(), "PFDock.onOptionsItemSelected");
-		if (item.getItemId() == R.id.about) {
-			// Show the about box
-			LayoutInflater li = LayoutInflater.from(this);
-			final View about = li.inflate(R.layout.aboutbox, null);
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setView(about)
-					.setTitle(R.string.about)
-					.setCancelable(false)
-					.setPositiveButton("OK",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									dialog.cancel();
-								}
-							});
-
-			AlertDialog alertDialog = builder.create();
-			alertDialog.show();
-			return true;
-		} else if (item.getItemId() == R.id.settings) {
+		if (item.getItemId() == R.id.settings) {
 			// Show the preferences dialog (via a separate class)
 			startActivity(new Intent(this, PFDockPreferences.class));
-			return true;
-		} else if (item.getItemId() == R.id.reset) {
-			// Query the user to reset their component info
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(R.string.confirm_reset)
-					.setCancelable(false)
-					.setPositiveButton("Yes",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									PFDock.this.resetComponentInfo();
-								}
-							})
-					.setNegativeButton("No",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									dialog.cancel();
-								}
-							});
-			AlertDialog alertDialog = builder.create();
-			alertDialog.show();
-
 			return true;
 		}
 
