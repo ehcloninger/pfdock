@@ -81,4 +81,10 @@ permissions and limitations under the License
         android:positiveButtonText="@string/ok"
         android:title="@string/about" />
 
+    <com.purplefoto.pfdock.OpenSourceDialogPreference
+        android:dialogMessage="@string/os_notice"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@string/ok"
+        android:title="@string/os_notice" />
+
 </PreferenceScreen>
