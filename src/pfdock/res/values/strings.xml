@@ -76,6 +76,6 @@ permissions and limitations under the License
     <string name="colors_label">Color settings</string>
     <string name="default_icon_color">purple</string>
     <string name="default_text_color">white</string>
-    <string name="os_notice">Open Source</string>
+    <string name="os_notice">Open-source</string>
     <string name="os_notice_desc">This application uses some or all of the following open-source projects. Credit goes to the individual authors.</string>
 </resources>
