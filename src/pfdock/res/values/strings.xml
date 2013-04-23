@@ -46,7 +46,7 @@ permissions and limitations under the License
     <string name="no_such_service">That service does not exist on this device. Check your settings for this button.</string>
     <string name="no_maps_service">No maps service exists on this device.</string>
     <string name="no_dialer_service">Cannot dial the phone on this device.</string>
-    <string name="pfurl">http://pfdock.purplefoto.com</string>
+    <string name="pfurl">http://pfdock.purplefoto.com/</string>
     <string name="abs_url">https://github.com/JakeWharton/ActionBarSherlock</string>
     <string name="reset_components">Reset components</string>
     <string name="confirm_reset">Do you want to reset all the components to their original settings?</string>
